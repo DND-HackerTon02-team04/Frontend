@@ -27,6 +27,9 @@
       "react-app/jest"
     ]
   },
+  "resolutions": {
+    "babel-jest": "^26.6.0"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
