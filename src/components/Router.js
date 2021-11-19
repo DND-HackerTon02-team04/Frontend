@@ -14,7 +14,7 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/photos" element={<PhotosPage />}></Route>
+        <Route path="/photos/:roomId" element={<PhotosPage />}></Route>
         <Route path="/custom" element={<CustomPage />}></Route>
         <Route path="/result" element={<ResultPage />}></Route>
         <Route path="/" exact={true} element={<MainPage />}></Route>
