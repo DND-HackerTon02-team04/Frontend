@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { Link, useParams, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import ImageLists from '../components/ImageLists';
+import LayoutSelector from '../components/LayoutSelector';
 import { useImages } from '../contexts/ImagesProvider';
 import useAxios from '../hooks/useAxios';
 
@@ -25,13 +26,14 @@ const PhotosPage  = () => {
         url: `/room/${roomId}`
       });
     }
-  },[]);
+  },[roomId]);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(window.location.href);
   },[]);
 
   const handleImagesChange = useCallback((images) => {
+    console.log(images);
     setImages(images);
   },[])
 
@@ -53,6 +55,8 @@ const PhotosPage  = () => {
 
   return (
     <>
+    <Wrapper>
+    <LayoutSelector />
     {!getImagesAPIState.isLoading &&
     <ImageLists 
       images={images}
@@ -62,12 +66,20 @@ const PhotosPage  = () => {
     }
     <ImageLayout />
     <Link to="/custom">꾸미기 페이지로!</Link>
-    <CopyLinkButton onClick={handleCopyLink}>링크 공유하기!</CopyLinkButton>
+    <CopyLinkButton onClick={handleCopyLink}>친구에게 링크 공유하기</CopyLinkButton>
+    </Wrapper>
     </>
   )
 }
 
 export default PhotosPage;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto;
+`;
 
 const ImageLayout = styled.div``;
 
