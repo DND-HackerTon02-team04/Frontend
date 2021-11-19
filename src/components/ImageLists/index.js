@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import ImageUploader from "./ImageUploader";
 import styled from 'styled-components';
+import useAxios from "../../hooks/useAxios";
 
 let reader = null;
+const imageFormData = new FormData();
 
-const ImageLists = ({initialImages = [], ...props}) => {
-  const [images,setImages] = useState(initialImages);
-
-
+const ImageLists = ({images, roomId, imagesChange, ...props}) => {
+  const [postNewImageAPIState, postNewImage] = useAxios();
 
   const makeImageDataToUrl = useCallback(changedFile => {
     if (!changedFile) {
@@ -15,10 +15,8 @@ const ImageLists = ({initialImages = [], ...props}) => {
       return;
     }
 
-    
     reader?.readAsDataURL(changedFile);
   }, []);
-
 
   const handleFileChanged = useCallback((e) => {
     e.preventDefault();
@@ -31,11 +29,17 @@ const ImageLists = ({initialImages = [], ...props}) => {
       return;
     }
 
-
     if (changedFile.type.includes('image')){
+      imageFormData.set('file', changedFile);
+
+      roomId && postNewImage({
+        method: 'post',
+        url: `/room/${roomId}`,
+        data: imageFormData
+      });
       makeImageDataToUrl(changedFile);
     }
-  },[makeImageDataToUrl])
+  },[makeImageDataToUrl, roomId, postNewImage])
 
   useEffect(() => {
     if (!reader) {
@@ -43,7 +47,7 @@ const ImageLists = ({initialImages = [], ...props}) => {
     }
 
     const handleLoadedUrl = () => {
-      setImages(images => [...images, reader?.result])
+      imagesChange && imagesChange([...images, reader?.result]);
     }
 
     reader?.addEventListener('load', handleLoadedUrl);

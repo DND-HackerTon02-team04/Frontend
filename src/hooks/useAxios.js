@@ -1,7 +1,7 @@
 import useAsyncFn from './useAsyncFn';
 import axios from 'axios';
 
-const BASE_URL = 'http://3.38.152.55:8080/';
+const BASE_URL = 'https://wxij8f3k9f.execute-api.ap-northeast-2.amazonaws.com/';
 
 axios.defaults.baseURL = BASE_URL;
 
