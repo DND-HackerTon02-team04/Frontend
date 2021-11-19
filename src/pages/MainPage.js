@@ -1,7 +1,16 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Logo from '../components/Logo';
 
-function MainPage() {
-  return <div>MainPage</div>;
+const MainPage = () => {
+
+
+  return (
+    <div>
+    <Logo />
+    <Link to="/photos/new">사진 찍기!</Link>
+    </div>
+  )
 }
 
 export default MainPage;
