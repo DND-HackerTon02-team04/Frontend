@@ -1,19 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Logo = () => {
+import logoSVG from '../assets/logo.svg';
+import mainLogoSVG from '../assets/logoMain.svg';
+const Logo = ({main, ...props}) => {
 
 
   return (
-    <ImageContainer>
-      <img src="#" alt='logo' />
-    </ImageContainer>
+      <img src={main ? mainLogoSVG : logoSVG} alt='logo' {...props} />
   )
 }
 
 export default Logo;
-
-const ImageContainer = styled.div`
-width: 100px;
-height: 100px;
-`;

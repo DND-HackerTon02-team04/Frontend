@@ -2,6 +2,8 @@ import { useCallback, useEffect } from "react"
 import ImageUploader from "./ImageUploader";
 import styled from 'styled-components';
 import useAxios from "../../hooks/useAxios";
+import { CONSTANTS, IMAGE } from "../../constants";
+import Image from "../base/Image";
 
 let reader = null;
 const imageFormData = new FormData();
@@ -53,18 +55,18 @@ const ImageLists = ({images, roomId, imagesChange, ...props}) => {
     reader?.addEventListener('load', handleLoadedUrl);
 
     return () => reader?.removeEventListener('load', handleLoadedUrl);
-  }, []);
+  }, [images]);
 
 
   return (
     <StyledImageList {...props}>
       {images?.map((image, idx) => <li key={idx}>
-        <img style={{width:150, height:150}} src={image} alt={`${idx}`} />
+        <Image src={image} alt={`${idx}`} />
       </li>)}
       <ImageUploader
         droppable
-        width={150}
-        height={150}
+        width={CONSTANTS.IMAGE.WIDTH}
+        height={CONSTANTS.IMAGE.HEIGHT}
         alt='uploadImage'
         onChange={handleFileChanged}
       />

@@ -21,6 +21,7 @@ const ImageUploader = ({
   const inputRef = useRef(null);
 
   const handleFileSelect = useCallback(() => {
+    console.log('file Select!');
     inputRef.current?.click();
   }, [inputRef]);
 
@@ -56,6 +57,7 @@ const ImageUploader = ({
       dragging={dragging}
       type={type}
       hasImage={!!src}
+      onClick={handleFileSelect}
       {...props}
     >
       <Input
@@ -65,10 +67,9 @@ const ImageUploader = ({
         onChange={handleFileChange}
       />
       <ImagePreview
-        src={src || '' }
+        src={src}
         alt={alt}
         type={type}
-        onClick={handleFileSelect}
         style={{ 
           mixBlendMode: 'multiply',
           ...style 
@@ -85,6 +86,7 @@ display: inline-block;
 border-radius: ${({ type }) => type === 'circle' ? '50%' : '3px'};
 border: ${({ dragging }) => dragging ? ` 3px solid green` : `2px solid #efefef`};
 position: relative;
+cursor: pointer;
 &:hover {
   background-color: rgba(0,0,0,.1);
   ::after{
