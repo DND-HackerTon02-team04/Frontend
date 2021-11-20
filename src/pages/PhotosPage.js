@@ -35,7 +35,6 @@ const PhotosPage = () => {
   }, []);
 
   const handleImagesChange = useCallback((images) => {
-    console.log(images);
     setImages(images);
   }, []);
 
@@ -69,14 +68,12 @@ const PhotosPage = () => {
           />
           <LayoutSelector />
         </Flex>
-        {!getImagesAPIState.isLoading && (
-          <div style={{padding: '0 10px 0 10px', height: 573.27}}>
-            <ImageLists
-              roomId={roomId}
-              imagesChange={handleImagesChange}
-            />
-          </div>
-        )}
+        <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5 }}>
+          <ImageLists
+            roomId={roomId}
+            imagesChange={handleImagesChange}
+          />
+        </div>
         <ImageLayout />
         <ButtonsContainer>
         <CopyLinkButton onClick={handleCopyLink}>

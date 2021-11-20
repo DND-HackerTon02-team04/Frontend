@@ -10,12 +10,13 @@ import html2canvas from "html2canvas";
 import ImageLists from "../components/ImageLists";
 
 const ContainerDiv = styled.div`
-  padding: 60px 36px 31px 36px;
+  padding: 90px 36px 31px 36px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   height: 100%;
+  position: relative;
 `;
 
 const Text = styled.p`
@@ -31,15 +32,8 @@ const PhotosDiv = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 43px 15px 27px 15px;
+  padding: 20px 15px 27px 15px;
   background: ${(props) => props.color || "linear-gradient(#68b1e6, #b8e6cf)"};
-`;
-
-const PhotoImage = styled.img`
-  border-radius: 20px;
-  background-color: ${(props) => props.color};
-  width: 100%;
-  height: 100%;
 `;
 
 const ArrowLeftDiv = styled.div`
@@ -57,12 +51,6 @@ const ArrowRightDiv = styled.div`
 // props : grid, photosUrlArray
 function CustomPage() {
   const navigate = useNavigate();
-  const photos = [
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-  ];
 
   const {imagesState:{images, color}, setColor} = useImages();
   const [colorIndex, setColorIndex] = useState(0);
@@ -125,7 +113,7 @@ function CustomPage() {
           />
         </ArrowLeftDiv>
         <PhotosDiv color={color} id='capture'>
-          <Logo style={{ marginBottom: 26 }} />
+          <Logo small style={{ marginBottom: 26 }} />
           <ImageLists />
         </PhotosDiv>
         <ArrowRightDiv>
