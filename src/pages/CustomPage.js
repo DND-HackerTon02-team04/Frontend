@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 import { Button, ArrowButton } from "../components/Buttons";
@@ -6,6 +6,7 @@ import dummyData from "../dummyData.json";
 import { useNavigate } from "react-router";
 import { useImages } from "../contexts/ImagesProvider";
 import { ReactComponent as Logo } from "../components/assets/customLogo.svg";
+import html2canvas from "html2canvas";
 
 const ContainerDiv = styled.div`
   padding: 60px 36px 31px 36px;
@@ -63,14 +64,31 @@ function CustomPage() {
   ];
 
   const [color, setColor] = useState(null);
-  const [images, setImages] = useImages([]);
+  const [images, setImages] = useImages();
   const [colorIndex, setColorIndex] = useState(0);
 
   useEffect(() => {}, []);
 
   const handleClick = () => {
-    navigate("/result");
+    html2canvas(document.querySelector('#capture'),{
+      allowTaint: true,
+      useCORS: true
+    }).then((canvas) => {
+      document.body.appendChild(canvas);
+      onSaveAs(canvas.toDataURL('image/png'), 'sticker-photo.png');
+      console.log(canvas);
+    })
+    // navigate("/result");
   };
+
+  const onSaveAs = (uri, filename) => {
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = uri;
+    link.download = filename;
+    link.click();
+    document.body.removeChild(link);
+  }
 
   const handleArrowClick = (arrow) => {
     const addNumber = arrow === "right" ? 1 : -1;
@@ -84,6 +102,10 @@ function CustomPage() {
     setColor(dummyData.colors[colorIndex]);
   };
 
+
+
+
+
   return (
     <div
       style={{
@@ -94,26 +116,26 @@ function CustomPage() {
         padding: 0,
       }}
     >
-      <ContainerDiv>
+      <ContainerDiv >
         <Text>배경을 선택해주세요.</Text>
-        <PhotosDiv color={color}>
+        <ArrowLeftDiv>
+          <ArrowButton
+            onClick={() => handleArrowClick("left")}
+            arrow="left"
+          />
+        </ArrowLeftDiv>
+        <PhotosDiv color={color} id='capture'>
           <Logo style={{ marginBottom: 26 }} />
-          <ArrowLeftDiv>
-            <ArrowButton
-              onClick={() => handleArrowClick("left")}
-              arrow="left"
-            />
-          </ArrowLeftDiv>
-          <ArrowRightDiv>
-            <ArrowButton
-              onClick={() => handleArrowClick("right")}
-              arrow="right"
-            />
-          </ArrowRightDiv>
-          {images.map((photo) => (
-            <PhotoImage src={photo} />
+          {images.map((photo,idx) => (
+            <PhotoImage src={photo} key={idx}/>
           ))}
         </PhotosDiv>
+        <ArrowRightDiv>
+          <ArrowButton
+            onClick={() => handleArrowClick("right")}
+            arrow="right"
+          />
+        </ArrowRightDiv>
         <Button text="사진 출력하기" onClick={handleClick} />
       </ContainerDiv>
     </div>
