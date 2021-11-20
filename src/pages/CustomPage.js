@@ -6,6 +6,7 @@ import dummyData from "../dummyData.json";
 import { useNavigate } from "react-router";
 import { useImages } from "../contexts/ImagesProvider";
 import { ReactComponent as Logo } from "../assets/customLogo.svg";
+import Photos from "../components/Photos";
 
 const ContainerDiv = styled.div`
   padding: 60px 36px 31px 36px;
@@ -31,6 +32,9 @@ const PhotosDiv = styled.div`
   height: 100%;
   padding: 43px 15px 27px 15px;
   background: ${(props) => props.color || "linear-gradient(#68b1e6, #b8e6cf)"};
+  box-shadow: rgb(255, 251, 198) 0px 10px 55px,
+    rgb(255, 251, 198) 0px -12px 30px, rgb(255, 251, 198) 0px 4px 6px,
+    rgb(255, 251, 198) 0px 12px 13px, rgb(255, 251, 198) 0px -3px 5px;
 `;
 
 const PhotoImage = styled.img`
@@ -40,15 +44,12 @@ const PhotoImage = styled.img`
   height: 100%;
 `;
 
-const ArrowLeftDiv = styled.div`
+const ArrowDiv = styled.div`
+  padding: 0 6px;
+  width: 370px;
+  display: flex;
+  justify-content: space-between;
   position: absolute;
-  left: 6px;
-  bottom: 372px;
-`;
-
-const ArrowRightDiv = styled.div`
-  position: absolute;
-  right: 6px;
   bottom: 372px;
 `;
 
@@ -89,31 +90,21 @@ function CustomPage() {
       style={{
         width: 370,
         height: 801,
-        background: "white",
+        background:
+          "linear-gradient(0deg, #67B1E6 -115.92%, #FFFFFF 48.14%, #67B1E6 186.7%)",
         margin: 0,
         padding: 0,
       }}
     >
       <ContainerDiv>
         <Text>배경을 선택해주세요.</Text>
-        <PhotosDiv color={color}>
-          <Logo style={{ marginBottom: 26 }} />
-          <ArrowLeftDiv>
-            <ArrowButton
-              onClick={() => handleArrowClick("left")}
-              arrow="left"
-            />
-          </ArrowLeftDiv>
-          <ArrowRightDiv>
-            <ArrowButton
-              onClick={() => handleArrowClick("right")}
-              arrow="right"
-            />
-          </ArrowRightDiv>
-          {images.map((photo) => (
-            <PhotoImage src={photo} />
-          ))}
-        </PhotosDiv>
+        <Photos
+          color={color}
+          custom={true}
+          handleClick={handleClick}
+          handleArrowClick={handleArrowClick}
+          images={images}
+        />
         <Button text="사진 출력하기" onClick={handleClick} />
       </ContainerDiv>
     </div>

@@ -1,5 +1,5 @@
 {
-  "colors": ["blue", "pink", "purple"],
+  "colors": ["#c5adff", "#9ee8ff", "pink", "#000"],
   "layouts": [
     {
       "id": 1,
