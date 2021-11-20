@@ -16,7 +16,7 @@ const ImagesProvider = ({ children }) => {
   });
 
   const setImages = (images) => {
-    setImagesState((prevImagesState) => ({...prevImagesState, images}));
+    setImagesState((imagesState) => ({...imagesState, images}));
   };
 
   const setGridLayout = (gridLayout) => {
