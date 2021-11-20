@@ -14,7 +14,11 @@ import Spinner from "../components/Spinner";
 const PhotosPage = () => {
   // const params = useParams();
   const { roomId } = useParams();
-  const {imagesState:{images, gridLayout} , setImages, setGridLayout } = useImages();
+  const {
+    imagesState: { images, gridLayout },
+    setImages,
+    setGridLayout,
+  } = useImages();
   const navigate = useNavigate();
   const [createRoomAPIState, createRoom] = useAxios("/room", {
     method: "post",
@@ -37,6 +41,7 @@ const PhotosPage = () => {
 
   const handleImagesChange = useCallback((images) => {
     setImages(images);
+    console.log(gridLayout);
   }, []);
 
   useEffect(() => {
@@ -55,35 +60,45 @@ const PhotosPage = () => {
     }
   }, [getImagesAPIState]);
 
-
   return (
     <>
       <Wrapper>
         <Flex>
-          <PhotosLogo 
+          <PhotosLogo
             style={{
-              position:'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
-            }} 
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: 0,
+            }}
           />
           <LayoutSelector />
         </Flex>
-        <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5, position: 'relative' }}>
-          {roomId !== 'new' && getImagesAPIState.value ? (<ImageLists
-            roomId={roomId}
-            imagesChange={handleImagesChange}
-          
-            />) : <Spinner color='#fff98f' size={40} style={{position: 'absolute', top: '40%', left: '45%'}} />
-          }
+        <div
+          style={{
+            padding: "0 10px 0 10px",
+            height: 573.27,
+            width: 332.5,
+            position: "relative",
+          }}
+        >
+          {roomId !== "new" && getImagesAPIState.value ? (
+            <ImageLists roomId={roomId} imagesChange={handleImagesChange} />
+          ) : (
+            <Spinner
+              color="#fff98f"
+              size={40}
+              style={{ position: "absolute", top: "40%", left: "45%" }}
+            />
+          )}
         </div>
         <ImageLayout />
         <ButtonsContainer>
-        <CopyLinkButton onClick={handleCopyLink}>
-          친구에게 링크 공유하기
-        </CopyLinkButton>
-        <ArrowButton onClick={() =>navigate('/custom')} arrow='right' />
+          <CopyLinkButton onClick={handleCopyLink}>
+            친구에게 링크 공유하기
+          </CopyLinkButton>
+          <ArrowButton onClick={() => navigate("/custom")} arrow="right" />
         </ButtonsContainer>
       </Wrapper>
     </>
@@ -115,17 +130,22 @@ const ButtonsContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 30px;
-
 `;
 
 const ImageLayout = styled.div``;
 
 const CopyLinkButton = styled.button`
+  cursor: pointer;
   width: 262px;
   height: 56.5px;
   border-radius: 33px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: none;
+  transition: transform 0.3s ease-in-out;
+  font-size: 13px;
+  &:hover {
+    transform: scale(1.07) translateY(-5px);
+  }
 `;
 
 const StyledSpinner = styled(Spinner)`
@@ -134,4 +154,3 @@ const StyledSpinner = styled(Spinner)`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
-

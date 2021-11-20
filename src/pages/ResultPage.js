@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingPage from "./LoadingPage";
 import { ReactComponent as Logo } from "../assets/photosLogo.svg";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useImages } from "../contexts/ImagesProvider";
 import Photos from "../components/Photos";
 import { Button } from "../components/Buttons";
@@ -18,9 +18,17 @@ const ContainerDiv = styled.div`
   justify-content: center;
 `;
 
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const ButtonsContainer = styled.div`
   display: flex;
   align-items: flex-end;
+  position: absolute;
+  bottom: 30px;
 `;
 
 const IconDiv = styled.div`
@@ -39,6 +47,55 @@ const IconDiv = styled.div`
   }
 `;
 
+const imgAnimation = keyframes`
+  0% {
+    top: -500;
+  }
+  35% {
+    /* left: 30%; */
+    top: -400px;
+  }
+  38%{
+    /* left: 29%; */
+    top: -410px;
+  }
+  41%{
+    /* left: 31%; */
+    top: -400px;
+  }
+  44%{
+    /* left: 29%; */
+    top: -410px;
+  }
+  47% {    
+    /* left: 30%; */
+    top: -400px;
+  }
+  100%{
+    top: 110px;
+  }
+`;
+
+const Image = styled.img`
+  position: absolute;
+  top: -800px;
+  left: 30%;
+  width: 40%;
+  height: 70%;
+  animation: ${imgAnimation} 5s;
+`;
+
+// const StyledWrapper = styled.div`
+//   width: 100px;
+//   height: 100px;
+//   background: #00bfb2;
+//   ${(props) =>
+//     props.active &&
+//     `
+//    animation: ${imgAnimation} 2s 1s infinite linear alternate;
+//   `}
+// `;
+
 const Icon = styled(BsFillShareFill)`
   width: 30px;
   height: 30px;
@@ -52,35 +109,35 @@ function ResultPage() {
     setTimeout(() => {
       setLoading(false);
     }, 1500);
-  },[]);
+  }, []);
 
   const handleSave = () => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     document.body.appendChild(link);
     link.href = finalImage;
-    link.download = '스티커 사진';
+    link.download = "스티커 사진";
     link.click();
     document.body.removeChild(link);
   };
 
   return (
     <>
-      {
-        loading
-        ? <LoadingPage loading={loading} />
-        : (
-      <ContainerDiv>
-        <Logo style={{ marginBottom: 30 }} />
-        <img src={finalImage} />;
-        <ButtonsContainer>
-          <IconDiv>
-            <Icon />
-          </IconDiv>
-          <Button text="이미지 저장하기" onClick={handleSave} />
-        </ButtonsContainer>
-      </ContainerDiv>
-        )
-    } 
+      {loading ? (
+        <LoadingPage loading={loading} />
+      ) : (
+        <ContainerDiv>
+          <LogoContainer>
+            <Logo style={{ marginBottom: 30 }} />
+          </LogoContainer>
+          <Image src={finalImage} />;
+          <ButtonsContainer>
+            <IconDiv>
+              <Icon />
+            </IconDiv>
+            <Button text="이미지 저장하기" onClick={handleSave} />
+          </ButtonsContainer>
+        </ContainerDiv>
+      )}
     </>
   );
 }
@@ -89,4 +146,4 @@ export default ResultPage;
 
 const FinalImage = styled.img`
   object-fit: cover;
-`
+`;
