@@ -5,7 +5,7 @@ import { Button, ArrowButton } from "../components/Buttons";
 import dummyData from "../dummyData.json";
 import { useNavigate } from "react-router";
 import { useImages } from "../contexts/ImagesProvider";
-import { ReactComponent as Logo } from "../components/assets/customLogo.svg";
+import { ReactComponent as Logo } from "../assets/customLogo.svg";
 
 const ContainerDiv = styled.div`
   padding: 60px 36px 31px 36px;

@@ -1,76 +1,80 @@
 // import { useParams } from "react-router"
-import { useCallback, useEffect } from 'react';
-import { Link, useParams, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import ImageLists from '../components/ImageLists';
-import LayoutSelector from '../components/LayoutSelector';
-import { useImages } from '../contexts/ImagesProvider';
-import useAxios from '../hooks/useAxios';
+import { useCallback, useEffect, useContext } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import ImageLists from "../components/ImageLists";
+import LayoutSelector from "../components/LayoutSelector";
+import { useImages } from "../contexts/ImagesProvider";
+import useAxios from "../hooks/useAxios";
+import { ReactComponent as PhotosLogo } from "../assets/photosLogo.svg";
 
 // https://..../upload/:roomId
-const PhotosPage  = () => {
+const PhotosPage = () => {
   // const params = useParams();
   const { roomId } = useParams();
-  const [images, setImages] = useImages([]);
+  const [images, setImages, gridLayout, setGridLayout] = useImages([]);
   const navigate = useNavigate();
-  const [createRoomAPIState, createRoom] = useAxios('/room',{
-    method: 'post'
+  const [createRoomAPIState, createRoom] = useAxios("/room", {
+    method: "post",
   });
-  const [getImagesAPIState, getImagesAPI ] = useAxios();
+  const [getImagesAPIState, getImagesAPI] = useAxios();
 
   useEffect(() => {
-    if (roomId === 'new') {
+    if (roomId === "new") {
       createRoom();
-    }else {
+    } else {
       getImagesAPI({
-        url: `/room/${roomId}`
+        url: `/room/${roomId}`,
       });
     }
-  },[roomId]);
+  }, [roomId]);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(window.location.href);
-  },[]);
+  }, []);
 
   const handleImagesChange = useCallback((images) => {
     console.log(images);
     setImages(images);
-  },[])
+  }, []);
 
   useEffect(() => {
     if (createRoomAPIState.value?.room_code) {
       const roomId = createRoomAPIState.value.room_code;
-      navigate(`/photos/${roomId}`, {replace: true});
+      navigate(`/photos/${roomId}`, { replace: true });
     }
-  },[createRoomAPIState, navigate]);
+  }, [createRoomAPIState, navigate]);
 
   useEffect(() => {
     if (getImagesAPIState.value) {
       const newImages = getImagesAPIState.value?.image_list;
-      if (newImages){
+      if (newImages) {
         setImages(newImages);
       }
     }
-  },[getImagesAPIState])
+  }, [getImagesAPIState]);
 
   return (
     <>
-    <Wrapper>
-    <LayoutSelector />
-    {!getImagesAPIState.isLoading &&
-    <ImageLists 
-      images={images}
-      roomId={roomId} 
-      imagesChange={handleImagesChange} 
-      />
-    }
-    <ImageLayout />
-    <Link to="/custom">꾸미기 페이지로!</Link>
-    <CopyLinkButton onClick={handleCopyLink}>친구에게 링크 공유하기</CopyLinkButton>
-    </Wrapper>
+      <Wrapper>
+        <LayoutSelector />
+        <PhotosLogo />
+        {!getImagesAPIState.isLoading && (
+          <ImageLists
+            images={images}
+            roomId={roomId}
+            imagesChange={handleImagesChange}
+          />
+        )}
+        <ImageLayout />
+        <Link to="/custom">꾸미기 페이지로!</Link>
+        <CopyLinkButton onClick={handleCopyLink}>
+          친구에게 링크 공유하기
+        </CopyLinkButton>
+      </Wrapper>
     </>
-  )
-}
+  );
+};
 
 export default PhotosPage;
 

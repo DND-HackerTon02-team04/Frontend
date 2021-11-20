@@ -22,7 +22,7 @@ const AppContainer = styled.div`
   width: 370px;
   min-height: 100vh;
   margin: 0 auto;
-
+  background: linear-gradient(#68b1e6, #b8e6cf);
   @media (max-width: 370px) {
     width: 100%;
   }
