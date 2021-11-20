@@ -41,7 +41,6 @@ const PhotosPage = () => {
     setImages(images)
   }, [setImages]);
 
-  console.log(images.length, maxCount);
   const handleNext = useCallback(() => {
     if (images.length < maxCount) {
       setShowNotationModal(true);
@@ -72,18 +71,18 @@ const PhotosPage = () => {
     }
   }, [getImagesAPIState]);
 
-
   return (
     <>
       <Wrapper>
         <Flex>
-          <PhotosLogo 
+          <PhotosLogo
             style={{
-              position:'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
-            }} 
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: 0,
+            }}
           />
           <LayoutSelector />
         </Flex>
@@ -133,17 +132,22 @@ const ButtonsContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 30px;
-
 `;
 
 const ImageLayout = styled.div``;
 
 const CopyLinkButton = styled.button`
+  cursor: pointer;
   width: 262px;
   height: 56.5px;
   border-radius: 33px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: none;
+  transition: transform 0.3s ease-in-out;
+  font-size: 13px;
+  &:hover {
+    transform: scale(1.07) translateY(-5px);
+  }
 `;
 
 const StyledSpinner = styled(Spinner)`
@@ -152,4 +156,3 @@ const StyledSpinner = styled(Spinner)`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
-
