@@ -1,8 +1,6 @@
 import { useCallback, useEffect } from "react"
 import ImageUploader from "./ImageUploader";
-import styled from 'styled-components';
 import useAxios from "../../hooks/useAxios";
-import { CONSTANTS, IMAGE } from "../../constants";
 import Image from "../base/Image";
 import Layout from "../Layout";
 import { useImages } from "../../contexts/ImagesProvider";
