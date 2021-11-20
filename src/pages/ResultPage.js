@@ -58,6 +58,7 @@ const imgAnimation = keyframes`
   38%{
     /* left: 29%; */
     top: -410px;
+    transform: rotate(5deg);
   }
   41%{
     /* left: 31%; */
@@ -66,10 +67,15 @@ const imgAnimation = keyframes`
   44%{
     /* left: 29%; */
     top: -410px;
+    transform: rotate(-5deg);
+
   }
   47% {    
     /* left: 30%; */
     top: -400px;
+  }
+  78% {
+    transform: rotate(0);
   }
   100%{
     top: 110px;
@@ -79,10 +85,11 @@ const imgAnimation = keyframes`
 const Image = styled.img`
   position: absolute;
   top: -800px;
-  left: 30%;
-  width: 40%;
-  height: 70%;
-  animation: ${imgAnimation} 5s;
+  left: calc(50% - 149px);
+  /* transform: translate(-50%, 0); */
+  animation: ${imgAnimation} 4s ease-in-out forwards;
+  border-radius: 15px;
+  z-index: 3;
 `;
 
 // const StyledWrapper = styled.div`
@@ -120,6 +127,7 @@ function ResultPage() {
     document.body.removeChild(link);
   };
 
+
   return (
     <>
       {loading ? (
@@ -129,7 +137,7 @@ function ResultPage() {
           <LogoContainer>
             <Logo style={{ marginBottom: 30 }} />
           </LogoContainer>
-          <Image src={finalImage} />;
+            <Image src={finalImage} />;
           <ButtonsContainer>
             <IconDiv>
               <Icon />
