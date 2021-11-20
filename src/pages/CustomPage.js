@@ -48,25 +48,21 @@ const ArrowLeftDiv = styled.div`
 const ArrowRightDiv = styled.div`
   position: absolute;
   bottom: 372px;
+  right: 6px;
 `;
 
 // props : grid, photosUrlArray
 function CustomPage() {
-  const navigate = useNavigate();
 
   const {imagesState:{images, color}, setColor} = useImages();
   const [colorIndex, setColorIndex] = useState(0);
-  console.log(images);
-  useEffect(() => {}, []);
 
   const handleClick = () => {
     html2canvas(document.querySelector('#capture'),{
       allowTaint: true,
       useCORS: true
     }).then((canvas) => {
-      document.body.appendChild(canvas);
       onSaveAs(canvas.toDataURL('image/png'), 'sticker-photo.png');
-      console.log(canvas);
     })
     // navigate("/result");
   };
@@ -91,10 +87,6 @@ function CustomPage() {
     }
     setColor(dummyData.colors[colorIndex]);
   };
-
-
-
-
 
   return (
     <div
