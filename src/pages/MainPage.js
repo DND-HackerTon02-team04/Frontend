@@ -41,7 +41,6 @@ const StyledLink = styled(Link)`
   border-radius: 36.01px;
   position: absolute;
   bottom: 90.55px;
-  /* box-shadow: 0px 1.31556px 1.31556px rgba(0, 0, 0, 0.25); */
   background-image: url(${startButton});
   background-repeat: no-repeat;
   background-position: center;

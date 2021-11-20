@@ -6,6 +6,8 @@ import { useImages } from "../contexts/ImagesProvider";
 import Photos from "../components/Photos";
 import { Button } from "../components/Buttons";
 import { BsFillShareFill } from "react-icons/bs";
+import ImageLists from "../components/ImageLists";
+import { useFinalImage } from "../contexts/FinalImageProvider";
 
 const ContainerDiv = styled.div`
   width: 100%;
@@ -44,37 +46,47 @@ const Icon = styled(BsFillShareFill)`
 `;
 
 function ResultPage() {
-  const [images, setImages] = useImages([]);
+  const [finalImage, setFinalImage] = useFinalImage();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 1500);
-  });
+  },[]);
 
-  const handleClick = () => {
-    console.log("result");
+  const handleSave = () => {
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = finalImage;
+    link.download = '스티커 사진';
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <>
-      <LoadingPage loading={loading} />
+      {
+        loading
+        ? <LoadingPage loading={loading} />
+        : (
       <ContainerDiv>
         <Logo style={{ marginBottom: 30 }} />
-        <Photos
-          // color={color}
-          custom={false}
-          images={images}
-        />
+        <img src={finalImage} />;
         <ButtonsContainer>
           <IconDiv>
             <Icon />
           </IconDiv>
-          <Button text="이미지 저장하기" onClick={handleClick} />
+          <Button text="이미지 저장하기" onClick={handleSave} />
         </ButtonsContainer>
       </ContainerDiv>
+        )
+    } 
     </>
   );
 }
 
 export default ResultPage;
+
+const FinalImage = styled.img`
+  object-fit: cover;
+`

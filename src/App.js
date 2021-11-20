@@ -2,17 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 import Router from "./components/Router";
+import FinalImageProvider from "./contexts/FinalImageProvider";
 import ImagesProvider from "./contexts/ImagesProvider";
 import GlobalStyles from "./GlobalStyles";
 
 function App() {
   return (
+    <FinalImageProvider>
     <ImagesProvider>
       <AppContainer>
         <Router />
         <GlobalStyles />
       </AppContainer>
     </ImagesProvider>
+    </FinalImageProvider>
   );
 }
 

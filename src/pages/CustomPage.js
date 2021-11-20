@@ -8,6 +8,7 @@ import { useImages } from "../contexts/ImagesProvider";
 import Logo from "../components/Logo";
 import html2canvas from "html2canvas";
 import ImageLists from "../components/ImageLists";
+import { useFinalImage } from "../contexts/FinalImageProvider";
 
 const ContainerDiv = styled.div`
   padding: 90px 36px 31px 36px;
@@ -34,6 +35,10 @@ const PhotosDiv = styled.div`
   height: 100%;
   padding: 20px 15px 27px 15px;
   background: ${(props) => props.color || "linear-gradient(#68b1e6, #b8e6cf)"};
+  
+`;
+
+const ShadowDiv = styled.div`
   box-shadow: rgb(255, 251, 198) 0px 10px 55px,
     rgb(255, 251, 198) 0px -12px 30px, rgb(255, 251, 198) 0px 4px 6px,
     rgb(255, 251, 198) 0px 12px 13px, rgb(255, 251, 198) 0px -3px 5px;
@@ -54,27 +59,23 @@ const ArrowRightDiv = styled.div`
 // props : grid, photosUrlArray
 function CustomPage() {
 
-  const {imagesState:{images, color}, setColor} = useImages();
+  const {imagesState:{color}, setColor} = useImages();
   const [colorIndex, setColorIndex] = useState(0);
+  const [finalImage, setFinalImage] = useFinalImage();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     html2canvas(document.querySelector('#capture'),{
       allowTaint: true,
       useCORS: true
     }).then((canvas) => {
-      onSaveAs(canvas.toDataURL('image/png'), 'sticker-photo.png');
+      setFinalImage(canvas.toDataURL('image/png'));
+      // onSaveAs(canvas.toDataURL('image/png'), 'sticker-photo.png');
     })
-    // navigate("/result");
+    navigate("/result");
   };
 
-  const onSaveAs = (uri, filename) => {
-    const link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = uri;
-    link.download = filename;
-    link.click();
-    document.body.removeChild(link);
-  }
+
 
   const handleArrowClick = (arrow) => {
     const addNumber = arrow === "right" ? 1 : -1;
@@ -107,10 +108,12 @@ function CustomPage() {
             arrow="left"
           />
         </ArrowLeftDiv>
+        <ShadowDiv>
         <PhotosDiv color={color} id='capture'>
           <Logo small style={{ marginBottom: 26 }} />
           <ImageLists />
         </PhotosDiv>
+        </ShadowDiv>
         <ArrowRightDiv>
           <ArrowButton
             onClick={() => handleArrowClick("right")}

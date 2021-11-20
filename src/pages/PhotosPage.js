@@ -8,6 +8,7 @@ import { useImages } from "../contexts/ImagesProvider";
 import useAxios from "../hooks/useAxios";
 import { ReactComponent as PhotosLogo } from "../assets/photosLogo.svg";
 import { ArrowButton } from "../components/Buttons";
+import Spinner from "../components/Spinner";
 
 // https://..../upload/:roomId
 const PhotosPage = () => {
@@ -54,6 +55,7 @@ const PhotosPage = () => {
     }
   }, [getImagesAPIState]);
 
+
   return (
     <>
       <Wrapper>
@@ -68,11 +70,13 @@ const PhotosPage = () => {
           />
           <LayoutSelector />
         </Flex>
-        <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5 }}>
-          <ImageLists
+        <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5, position: 'relative' }}>
+          {roomId !== 'new' && getImagesAPIState.value ? (<ImageLists
             roomId={roomId}
             imagesChange={handleImagesChange}
-          />
+          
+            />) : <Spinner color='#fff98f' size={40} style={{position: 'absolute', top: '40%', left: '45%'}} />
+          }
         </div>
         <ImageLayout />
         <ButtonsContainer>
@@ -122,5 +126,12 @@ const CopyLinkButton = styled.button`
   border-radius: 33px;
   background: #FFFFFF;
   border: none;
+`;
+
+const StyledSpinner = styled(Spinner)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 

@@ -5,7 +5,7 @@ import { ReactComponent as LoadingMessage } from "../assets/loadingMessage.svg";
 
 const LoadingContainer = styled.div`
   z-index: 100;
-  display: absolut;
+  display: absolute;
   top: 0;
   display: ${(props) => (props.show ? "flex" : "none")};
 `;
