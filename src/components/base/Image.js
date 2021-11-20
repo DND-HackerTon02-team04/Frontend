@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CONSTANTS } from '../../constants';
-import placeholder from '../../assets/plus.svg';
+import {ReactComponent as Plus} from '../../assets/plus.svg';
 
 const Image = ({ 
   src,
@@ -15,12 +15,10 @@ const Image = ({
       {src 
         ? <ImageStyled
           showPlaceholder={!src}
-          src={src ? src : placeholder} 
-          width={width} 
-          height={height} 
+          src={src} 
           {...props}
       />
-        : <Plus src={placeholder} alt='plus' />
+        : <StyledPlus />
       }
     </>
   );
@@ -30,20 +28,22 @@ export default Image;
 
 const ImageStyled = styled.img`
   display: block;
-  ${({ width, height }) => ({ 
-    width,
-    height 
-  })};
-  border-radius: ${CONSTANTS.IMAGE.RADIUS};
+  border-radius: ${CONSTANTS.IMAGE.RADIUS}px;
+  width: 100%;
+  height: 100%;
   `;
 
-const Plus = styled.img`
+const StyledPlus = styled(Plus)`
   display: block;
   cursor: pointer;
-  width: 66.52px;
-  height: 66.52px;
+  width: 45px;
+  height: 45px;
   position: absolute;
   top:50%;
   left: 50%;
   transform: translate(-50%,-50%);
+
+  & > svg path {
+    stroke : #BFDFF5;
+  }
 `;

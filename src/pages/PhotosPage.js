@@ -7,12 +7,13 @@ import LayoutSelector from "../components/LayoutSelector";
 import { useImages } from "../contexts/ImagesProvider";
 import useAxios from "../hooks/useAxios";
 import { ReactComponent as PhotosLogo } from "../assets/photosLogo.svg";
+import { ArrowButton } from "../components/Buttons";
 
 // https://..../upload/:roomId
 const PhotosPage = () => {
   // const params = useParams();
   const { roomId } = useParams();
-  const [images, setImages, gridLayout, setGridLayout] = useImages([]);
+  const {imagesState:{images, gridLayout} , setImages, setGridLayout } = useImages();
   const navigate = useNavigate();
   const [createRoomAPIState, createRoom] = useAxios("/room", {
     method: "post",
@@ -34,7 +35,6 @@ const PhotosPage = () => {
   }, []);
 
   const handleImagesChange = useCallback((images) => {
-    console.log(images);
     setImages(images);
   }, []);
 
@@ -57,20 +57,30 @@ const PhotosPage = () => {
   return (
     <>
       <Wrapper>
-        <LayoutSelector />
-        <PhotosLogo />
-        {!getImagesAPIState.isLoading && (
+        <Flex>
+          <PhotosLogo 
+            style={{
+              position:'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)'
+            }} 
+          />
+          <LayoutSelector />
+        </Flex>
+        <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5 }}>
           <ImageLists
-            images={images}
             roomId={roomId}
             imagesChange={handleImagesChange}
           />
-        )}
+        </div>
         <ImageLayout />
-        <Link to="/custom">꾸미기 페이지로!</Link>
+        <ButtonsContainer>
         <CopyLinkButton onClick={handleCopyLink}>
           친구에게 링크 공유하기
         </CopyLinkButton>
+        <ArrowButton onClick={() =>navigate('/custom')} arrow='right' />
+        </ButtonsContainer>
       </Wrapper>
     </>
   );
@@ -81,10 +91,36 @@ export default PhotosPage;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 500px;
+  align-items: center;
   margin: 0 auto;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  width: 100%;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  position: relative;
+  padding-right: 10px;
+  margin: 60px 0 60px 0;
+`;
+
+const ButtonsContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
 `;
 
 const ImageLayout = styled.div``;
 
-const CopyLinkButton = styled.button``;
+const CopyLinkButton = styled.button`
+  width: 262px;
+  height: 56.5px;
+  border-radius: 33px;
+  background: #FFFFFF;
+  border: none;
+`;
+

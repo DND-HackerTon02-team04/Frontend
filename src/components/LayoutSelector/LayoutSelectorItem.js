@@ -7,6 +7,7 @@ const ButtonStyled = styled.button`
   border: none;
   border-radius: 4px;
   width: 100%;
+  cursor: pointer;
 
   &:hover {
     opacity: .7;

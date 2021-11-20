@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import styled from "styled-components";
 import { Button, ArrowButton } from "../components/Buttons";
 import dummyData from "../dummyData.json";
 import { useNavigate } from "react-router";
 import { useImages } from "../contexts/ImagesProvider";
-import { ReactComponent as Logo } from "../assets/customLogo.svg";
-import Photos from "../components/Photos";
+import Logo from "../components/Logo";
+import html2canvas from "html2canvas";
+import ImageLists from "../components/ImageLists";
 
 const ContainerDiv = styled.div`
-  padding: 60px 36px 31px 36px;
+  padding: 90px 36px 31px 36px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
   height: 100%;
+  position: relative;
 `;
 
 const Text = styled.p`
@@ -30,25 +32,20 @@ const PhotosDiv = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 43px 15px 27px 15px;
+  padding: 20px 15px 27px 15px;
   background: ${(props) => props.color || "linear-gradient(#68b1e6, #b8e6cf)"};
   box-shadow: rgb(255, 251, 198) 0px 10px 55px,
     rgb(255, 251, 198) 0px -12px 30px, rgb(255, 251, 198) 0px 4px 6px,
     rgb(255, 251, 198) 0px 12px 13px, rgb(255, 251, 198) 0px -3px 5px;
 `;
 
-const PhotoImage = styled.img`
-  border-radius: 20px;
-  background-color: ${(props) => props.color};
-  width: 100%;
-  height: 100%;
+const ArrowLeftDiv = styled.div`
+  position: absolute;
+  left: 6px;
+  bottom: 372px;
 `;
 
-const ArrowDiv = styled.div`
-  padding: 0 6px;
-  width: 370px;
-  display: flex;
-  justify-content: space-between;
+const ArrowRightDiv = styled.div`
   position: absolute;
   bottom: 372px;
 `;
@@ -56,22 +53,32 @@ const ArrowDiv = styled.div`
 // props : grid, photosUrlArray
 function CustomPage() {
   const navigate = useNavigate();
-  const photos = [
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-    "https://source.unsplash.com/random/200x200?mountain",
-  ];
 
-  const [color, setColor] = useState(null);
-  const [images, setImages] = useImages([]);
+  const {imagesState:{images, color}, setColor} = useImages();
   const [colorIndex, setColorIndex] = useState(0);
-
+  console.log(images);
   useEffect(() => {}, []);
 
   const handleClick = () => {
-    navigate("/result");
+    html2canvas(document.querySelector('#capture'),{
+      allowTaint: true,
+      useCORS: true
+    }).then((canvas) => {
+      document.body.appendChild(canvas);
+      onSaveAs(canvas.toDataURL('image/png'), 'sticker-photo.png');
+      console.log(canvas);
+    })
+    // navigate("/result");
   };
+
+  const onSaveAs = (uri, filename) => {
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = uri;
+    link.download = filename;
+    link.click();
+    document.body.removeChild(link);
+  }
 
   const handleArrowClick = (arrow) => {
     const addNumber = arrow === "right" ? 1 : -1;
@@ -85,6 +92,10 @@ function CustomPage() {
     setColor(dummyData.colors[colorIndex]);
   };
 
+
+
+
+
   return (
     <div
       style={{
@@ -96,15 +107,24 @@ function CustomPage() {
         padding: 0,
       }}
     >
-      <ContainerDiv>
+      <ContainerDiv >
         <Text>배경을 선택해주세요.</Text>
-        <Photos
-          color={color}
-          custom={true}
-          handleClick={handleClick}
-          handleArrowClick={handleArrowClick}
-          images={images}
-        />
+        <ArrowLeftDiv>
+          <ArrowButton
+            onClick={() => handleArrowClick("left")}
+            arrow="left"
+          />
+        </ArrowLeftDiv>
+        <PhotosDiv color={color} id='capture'>
+          <Logo small style={{ marginBottom: 26 }} />
+          <ImageLists />
+        </PhotosDiv>
+        <ArrowRightDiv>
+          <ArrowButton
+            onClick={() => handleArrowClick("right")}
+            arrow="right"
+          />
+        </ArrowRightDiv>
         <Button text="사진 출력하기" onClick={handleClick} />
       </ContainerDiv>
     </div>

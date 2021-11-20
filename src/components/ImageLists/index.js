@@ -1,15 +1,16 @@
 import { useCallback, useEffect } from "react"
 import ImageUploader from "./ImageUploader";
-import styled from 'styled-components';
 import useAxios from "../../hooks/useAxios";
-import { CONSTANTS, IMAGE } from "../../constants";
 import Image from "../base/Image";
+import Layout from "../Layout";
+import { useImages } from "../../contexts/ImagesProvider";
 
 let reader = null;
 const imageFormData = new FormData();
 
-const ImageLists = ({images, roomId, imagesChange, ...props}) => {
+const ImageLists = ({ roomId, imagesChange, ...props}) => {
   const [postNewImageAPIState, postNewImage] = useAxios();
+  const {imagesState:{images, gridLayout:{maxCount}}} = useImages();
 
   const makeImageDataToUrl = useCallback(changedFile => {
     if (!changedFile) {
@@ -59,26 +60,22 @@ const ImageLists = ({images, roomId, imagesChange, ...props}) => {
 
 
   return (
-    <StyledImageList {...props}>
-      {images?.map((image, idx) => <li key={idx}>
+      <Layout {...props}>
+      {images?.filter((_,idx)=>idx<maxCount).map((image, idx) => <div style={{width:'100%', height:'100%'}} key={idx}>
         <Image src={image} alt={`${idx}`} />
-      </li>)}
-      <ImageUploader
-        droppable
-        width={CONSTANTS.IMAGE.WIDTH}
-        height={CONSTANTS.IMAGE.HEIGHT}
-        alt='uploadImage'
-        onChange={handleFileChanged}
-      />
-    </StyledImageList>
+      </div>)}
+      {images.length < maxCount &&
+        (
+          <ImageUploader
+            droppable
+            alt='uploadImage'
+            onChange={handleFileChanged}
+          />
+        )
+      }
+      </Layout>
   )
 }
 
 export default ImageLists;
 
-const StyledImageList = styled.ul`
-  list-style: none;
-  display: flex;
-  align-items: center;
-
-`;

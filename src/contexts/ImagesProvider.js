@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext } from "react";
 import useSessionStorage from "../hooks/useSessionStorage";
 
 const ImagesContext = React.createContext();
@@ -6,19 +6,31 @@ const ImagesContext = React.createContext();
 export const useImages = () => useContext(ImagesContext);
 
 const ImagesProvider = ({ children }) => {
-  const [images, setImages] = useSessionStorage("images", []);
-  const [gridLayout, setGridLayout] = useState({
-    id: 1,
-    row: 1,
-    column: 1,
+  const [imagesState, setImagesState] = useSessionStorage('images',{
+    images: [],
+    gridLayout: {
+      id: 0,
+      maxCount: 2
+    },
+    color : '',
   });
-  const updateImages = useCallback((newImages) => {
-    setImages(newImages);
-  }, []);
+
+  const setImages = useCallback((images) => {
+    setImagesState(imagesState => ({...imagesState, images }))
+  }, [setImagesState]);
+
+  const setGridLayout = useCallback((gridLayout) => {
+    console.error('layoutChange!');
+    setImagesState(imagesState => ({...imagesState, gridLayout}))
+  },[setImagesState]);
+
+  const setColor = useCallback((color)=> {
+    setImagesState(imagesState => ({...imagesState, color}));
+  },[setImagesState]);
 
   return (
     <ImagesContext.Provider
-      value={[images, updateImages, gridLayout, setGridLayout]}
+      value={{imagesState, setImages, setGridLayout, setColor}}
     >
       {children}
     </ImagesContext.Provider>

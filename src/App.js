@@ -1,9 +1,9 @@
 import React from "react";
-import GlobalStyles from "./components/GlobalStyles";
 import styled from "styled-components";
 
 import Router from "./components/Router";
 import ImagesProvider from "./contexts/ImagesProvider";
+import GlobalStyles from "./GlobalStyles";
 
 function App() {
   return (

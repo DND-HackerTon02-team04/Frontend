@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { CONSTANTS } from '../../constants';
 import Image from '../base/Image';
 
 
@@ -21,7 +22,6 @@ const ImageUploader = ({
   const inputRef = useRef(null);
 
   const handleFileSelect = useCallback(() => {
-    console.log('file Select!');
     inputRef.current?.click();
   }, [inputRef]);
 
@@ -83,12 +83,12 @@ export default ImageUploader;
 
 const InputContainer = styled.div`
 display: inline-block;
-border-radius: ${({ type }) => type === 'circle' ? '50%' : '3px'};
-border: ${({ dragging }) => dragging ? ` 3px solid green` : `2px solid #efefef`};
+border-radius: ${CONSTANTS.IMAGE.RADIUS}px;
 position: relative;
 cursor: pointer;
+background-color: #E2F4FA;
 &:hover {
-  background-color: rgba(0,0,0,.1);
+  opacity: .8;
   ::after{
   display: ${({ hasImage }) => hasImage ? 'block' : 'none'};
   cursor: pointer;
