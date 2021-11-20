@@ -16,8 +16,6 @@ const Image = ({
         ? <ImageStyled
           showPlaceholder={!src}
           src={src ? src : placeholder} 
-          width={width} 
-          height={height} 
           {...props}
       />
         : <Plus src={placeholder} alt='plus' />
@@ -30,11 +28,13 @@ export default Image;
 
 const ImageStyled = styled.img`
   display: block;
-  ${({ width, height }) => ({ 
+  /* ${({ width, height }) => ({ 
     width,
     height 
-  })};
-  border-radius: ${CONSTANTS.IMAGE.RADIUS};
+  })}; */
+  border-radius: ${CONSTANTS.IMAGE.RADIUS}px;
+  width: 100%;
+  height: 100%;
   `;
 
 const Plus = styled.img`

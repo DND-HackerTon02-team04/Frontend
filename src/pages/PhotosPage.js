@@ -1,86 +1,129 @@
 // import { useParams } from "react-router"
-import { useCallback, useEffect } from 'react';
-import { Link, useParams, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import ImageLists from '../components/ImageLists';
-import LayoutSelector from '../components/LayoutSelector';
-import { useImages } from '../contexts/ImagesProvider';
-import useAxios from '../hooks/useAxios';
+import { useCallback, useEffect, useContext } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import ImageLists from "../components/ImageLists";
+import LayoutSelector from "../components/LayoutSelector";
+import { useImages } from "../contexts/ImagesProvider";
+import useAxios from "../hooks/useAxios";
+import { ReactComponent as PhotosLogo } from "../assets/photosLogo.svg";
+import { ArrowButton } from "../components/Buttons";
 
 // https://..../upload/:roomId
-const PhotosPage  = () => {
+const PhotosPage = () => {
   // const params = useParams();
   const { roomId } = useParams();
-  const [images, setImages] = useImages([]);
+  const {imagesState:{images, gridLayout} , setImages, setGridLayout } = useImages();
   const navigate = useNavigate();
-  const [createRoomAPIState, createRoom] = useAxios('/room',{
-    method: 'post'
+  const [createRoomAPIState, createRoom] = useAxios("/room", {
+    method: "post",
   });
-  const [getImagesAPIState, getImagesAPI ] = useAxios();
+  const [getImagesAPIState, getImagesAPI] = useAxios();
 
   useEffect(() => {
-    if (roomId === 'new') {
+    if (roomId === "new") {
       createRoom();
-    }else {
+    } else {
       getImagesAPI({
-        url: `/room/${roomId}`
+        url: `/room/${roomId}`,
       });
     }
-  },[roomId]);
+  }, [roomId]);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(window.location.href);
-  },[]);
+  }, []);
 
   const handleImagesChange = useCallback((images) => {
     console.log(images);
     setImages(images);
-  },[])
+  }, []);
 
   useEffect(() => {
     if (createRoomAPIState.value?.room_code) {
       const roomId = createRoomAPIState.value.room_code;
-      navigate(`/photos/${roomId}`, {replace: true});
+      navigate(`/photos/${roomId}`, { replace: true });
     }
-  },[createRoomAPIState, navigate]);
+  }, [createRoomAPIState, navigate]);
 
   useEffect(() => {
     if (getImagesAPIState.value) {
       const newImages = getImagesAPIState.value?.image_list;
-      if (newImages){
+      if (newImages) {
         setImages(newImages);
       }
     }
-  },[getImagesAPIState])
+  }, [getImagesAPIState]);
 
   return (
     <>
-    <Wrapper>
-    <LayoutSelector />
-    {!getImagesAPIState.isLoading &&
-    <ImageLists 
-      images={images}
-      roomId={roomId} 
-      imagesChange={handleImagesChange} 
-      />
-    }
-    <ImageLayout />
-    <Link to="/custom">꾸미기 페이지로!</Link>
-    <CopyLinkButton onClick={handleCopyLink}>친구에게 링크 공유하기</CopyLinkButton>
-    </Wrapper>
+      <Wrapper>
+        <Flex>
+          <PhotosLogo 
+            style={{
+              position:'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)'
+            }} 
+          />
+          <LayoutSelector />
+        </Flex>
+        {!getImagesAPIState.isLoading && (
+          <div style={{padding: '0 10px 0 10px', height: 573.27}}>
+            <ImageLists
+              roomId={roomId}
+              imagesChange={handleImagesChange}
+            />
+          </div>
+        )}
+        <ImageLayout />
+        <ButtonsContainer>
+        <CopyLinkButton onClick={handleCopyLink}>
+          친구에게 링크 공유하기
+        </CopyLinkButton>
+        <ArrowButton onClick={() =>navigate('/custom')} arrow='right' />
+        </ButtonsContainer>
+      </Wrapper>
     </>
-  )
-}
+  );
+};
 
 export default PhotosPage;
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 500px;
+  align-items: center;
   margin: 0 auto;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  width: 100%;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  position: relative;
+  padding-right: 10px;
+  margin: 60px 0 60px 0;
+`;
+
+const ButtonsContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
 `;
 
 const ImageLayout = styled.div``;
 
-const CopyLinkButton = styled.button``;
+const CopyLinkButton = styled.button`
+  width: 262px;
+  height: 56.5px;
+  border-radius: 33px;
+  background: #FFFFFF;
+  border: none;
+`;
+

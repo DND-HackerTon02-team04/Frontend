@@ -1,14 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-
+import React from "react";
+import styled from "styled-components";
 
 const LayoutSelectorContainerStyled = styled.div`
-  height: 116.43px;
-  width: 108.53px;
+  /* height: 116.43px;
+  width: 108.53px; */
   padding: 13.93px 12.46px;
-  border-radius: 12.5px;
-  background-color: #C4C4C4;
-  position:absolute;
+  border-radius: 20px;
+  background-color: #b9e7d0;
+  position: absolute;
   top: auto;
   z-index: 500;
   animation: show 0.3s forwards;
@@ -16,7 +15,6 @@ const LayoutSelectorContainerStyled = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-
 
   @keyframes show {
     from {
@@ -31,17 +29,17 @@ const LayoutSelectorContainerStyled = styled.div`
 `;
 
 const LayoutSelectorContainer = ({ children, ...props }) => {
-
-  const MenuItems = React.Children.toArray(children)
-    .filter(element => React.isValidElement(element));
+  const MenuItems = React.Children.toArray(children).filter((element) =>
+    React.isValidElement(element)
+  );
 
   return (
     <div>
       <LayoutSelectorContainerStyled column {...props}>
         {MenuItems}
       </LayoutSelectorContainerStyled>
-    </div>);
+    </div>
+  );
 };
-
 
 export default LayoutSelectorContainer;

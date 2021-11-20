@@ -5,8 +5,9 @@ import { Button, ArrowButton } from "../components/Buttons";
 import dummyData from "../dummyData.json";
 import { useNavigate } from "react-router";
 import { useImages } from "../contexts/ImagesProvider";
-import { ReactComponent as Logo } from "../components/assets/customLogo.svg";
+import Logo from "../components/Logo";
 import html2canvas from "html2canvas";
+import ImageLists from "../components/ImageLists";
 
 const ContainerDiv = styled.div`
   padding: 60px 36px 31px 36px;
@@ -63,10 +64,9 @@ function CustomPage() {
     "https://source.unsplash.com/random/200x200?mountain",
   ];
 
-  const [color, setColor] = useState(null);
-  const [images, setImages] = useImages();
+  const {imagesState:{images, color}, setColor} = useImages();
   const [colorIndex, setColorIndex] = useState(0);
-
+  console.log(images);
   useEffect(() => {}, []);
 
   const handleClick = () => {
@@ -126,9 +126,7 @@ function CustomPage() {
         </ArrowLeftDiv>
         <PhotosDiv color={color} id='capture'>
           <Logo style={{ marginBottom: 26 }} />
-          {images.map((photo,idx) => (
-            <PhotoImage src={photo} key={idx}/>
-          ))}
+          <ImageLists />
         </PhotosDiv>
         <ArrowRightDiv>
           <ArrowButton

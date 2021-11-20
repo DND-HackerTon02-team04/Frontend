@@ -1,22 +1,39 @@
-import React, { useCallback, useContext } from 'react';
-import useSessionStorage from '../hooks/useSessionStorage';
+import React, { useCallback, useContext, useState } from "react";
+import useSessionStorage from "../hooks/useSessionStorage";
 
-const ImagesContext  = React.createContext();
+const ImagesContext = React.createContext();
 
 export const useImages = () => useContext(ImagesContext);
 
-const ImagesProvider = ({children}) => {
-  const [images, setImages] = useSessionStorage('images',[]);
+const ImagesProvider = ({ children }) => {
+  const [imagesState, setImagesState] = useSessionStorage('images',{
+    images: [],
+    gridLayout: {
+      id: 0,
+      maxCount: 2
+    },
+    color : '',
+  });
 
-  const updateImages = useCallback((newImages)=> {
-    setImages(newImages);
-  },[]);
+  const setImages = useCallback((images) => {
+    setImagesState(imagesState => ({...imagesState, images }))
+  }, [setImagesState]);
 
-  return <ImagesContext.Provider
-    value={[images, updateImages]}
-  >
-    {children}
-  </ImagesContext.Provider>
-}
+  const setGridLayout = useCallback((gridLayout) => {
+    setImagesState(imagesState => ({...imagesState, gridLayout}))
+  },[setImagesState]);
+
+  const setColor = useCallback((color)=> {
+    setImagesState(imagesState => ({...imagesState, color}));
+  },[setImagesState]);
+
+  return (
+    <ImagesContext.Provider
+      value={{imagesState, setImages, setGridLayout, setColor}}
+    >
+      {children}
+    </ImagesContext.Provider>
+  );
+};
 
 export default ImagesProvider;
