@@ -6,11 +6,11 @@ import { useImages } from "../contexts/ImagesProvider";
 const Layout = ({children, ...props}) => {
   const {imagesState:{gridLayout:{id}}} = useImages();
 
-
   return <Grid LayoutNumber={LayoutNumber[id]} {...props}>
     {children}
   </Grid>
 }
+
 
 export default Layout;
 
@@ -24,7 +24,6 @@ const Grid = styled.div`
 
 const LayoutNumber = {
   '0':css`
-    grid-template-columns: 1fr;
     grid-template-rows: repeat(2, 1fr);
   `,
   '1':css`

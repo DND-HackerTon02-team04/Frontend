@@ -1,5 +1,5 @@
 // import { useParams } from "react-router"
-import { useCallback, useEffect, useContext } from "react";
+import { useCallback, useEffect, useContext, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ImageLists from "../components/ImageLists";
@@ -9,17 +9,19 @@ import useAxios from "../hooks/useAxios";
 import { ReactComponent as PhotosLogo } from "../assets/photosLogo.svg";
 import { ArrowButton } from "../components/Buttons";
 import Spinner from "../components/Spinner";
+import NotationModal from "../components/NotationModal";
 
 // https://..../upload/:roomId
 const PhotosPage = () => {
   // const params = useParams();
   const { roomId } = useParams();
-  const {imagesState:{images, gridLayout} , setImages, setGridLayout } = useImages();
+  const {imagesState:{images, gridLayout:{id,maxCount}} , setImages, setGridLayout } = useImages();
   const navigate = useNavigate();
   const [createRoomAPIState, createRoom] = useAxios("/room", {
     method: "post",
   });
   const [getImagesAPIState, getImagesAPI] = useAxios();
+  const [showNotationModal, setShowNotationModal] = useState(false);
 
   useEffect(() => {
     if (roomId === "new") {
@@ -36,8 +38,19 @@ const PhotosPage = () => {
   }, []);
 
   const handleImagesChange = useCallback((images) => {
-    setImages(images);
-  }, []);
+    setImages(images)
+  }, [setImages]);
+
+  console.log(images.length, maxCount);
+  const handleNext = useCallback(() => {
+    if (images.length < maxCount) {
+      setShowNotationModal(true);
+
+      return;
+    }
+
+    navigate('/custom');
+  },[navigate, images, maxCount])
 
   useEffect(() => {
     if (createRoomAPIState.value?.room_code) {
@@ -45,12 +58,16 @@ const PhotosPage = () => {
       navigate(`/photos/${roomId}`, { replace: true });
     }
   }, [createRoomAPIState, navigate]);
+  
+    const handleSetImages = useCallback((images) => {
+      setImages(images);
+    },[setImages]);
 
   useEffect(() => {
     if (getImagesAPIState.value) {
       const newImages = getImagesAPIState.value?.image_list;
       if (newImages) {
-        setImages(newImages);
+        handleSetImages(newImages);
       }
     }
   }, [getImagesAPIState]);
@@ -71,11 +88,11 @@ const PhotosPage = () => {
           <LayoutSelector />
         </Flex>
         <div style={{padding: '0 10px 0 10px', height: 573.27 , width: 332.5, position: 'relative' }}>
-          {roomId !== 'new' && getImagesAPIState.value ? (<ImageLists
-            roomId={roomId}
-            imagesChange={handleImagesChange}
-          
-            />) : <Spinner color='#fff98f' size={40} style={{position: 'absolute', top: '40%', left: '45%'}} />
+          {roomId !== 'new' && getImagesAPIState.value ? (
+            <ImageLists
+              roomId={roomId}
+              imagesChange={handleImagesChange}/>
+            ) : <Spinner color='#fff98f' size={40} style={{position: 'absolute', top: '40%', left: '45%'}} />
           }
         </div>
         <ImageLayout />
@@ -83,9 +100,10 @@ const PhotosPage = () => {
         <CopyLinkButton onClick={handleCopyLink}>
           친구에게 링크 공유하기
         </CopyLinkButton>
-        <ArrowButton onClick={() =>navigate('/custom')} arrow='right' />
+        <ArrowButton onClick={handleNext} arrow='right' />
         </ButtonsContainer>
       </Wrapper>
+      <NotationModal visible={showNotationModal} title="경고" description="사진을 모두 넣어주세요!" handleClose={() => setShowNotationModal(false)} />
     </>
   );
 };

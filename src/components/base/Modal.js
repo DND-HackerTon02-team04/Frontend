@@ -2,10 +2,10 @@ import React, { useMemo, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import reactDom from 'react-dom';
 
-import { useViewPort } from '@context/ViewPortProvider';
-
 const BackgroundScreen = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   visibility: ${({ visible }) => visible ? 'visible' : 'hidden'};
   position: fixed;
   top: 0;
@@ -16,9 +16,11 @@ const BackgroundScreen = styled.div`
   z-index: 1000;
 `;
 
-
 const ModalContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   visibility: hidden; 
   top: 50%;
@@ -48,14 +50,8 @@ const Modal = ({
   onClose,
   ...props
 }) => {
-  const deviceType = useViewPort();
 
-  const defaultWidth = {
-    mobile: 300,
-    tablet: 400,
-    web: 500
-  };
-  const modalWidth = width || defaultWidth[deviceType];
+  const modalWidth = 300;
 
   const containerStyle = useMemo(() => ({
     width: modalWidth,
@@ -77,14 +73,9 @@ const Modal = ({
   
   return reactDom.createPortal(
     <BackgroundScreen 
-      justifyContent='center' 
-      alignItems='center'
       visible={visible}
       onClick={onClose}>
       <ModalContainer
-        column
-        justifyContent='center' 
-        alignItems='center'
         className={visible ? 'active' : ''} 
         style={{ 
           ...props.style,
